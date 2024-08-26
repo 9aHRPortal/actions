@@ -1,0 +1,23 @@
+name: Deploy HTML Site
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Copy files to Nginx directory
+      run: |
+        Copy-Item -Path .\* -Destination C:\nginx\html\ -Recurse -Force
+
+    - name: Restart Nginx
+      run: |
+        taskkill /F /IM nginx.exe
+        start C:\nginx\nginx.exe
